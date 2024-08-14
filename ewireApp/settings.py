@@ -25,7 +25,8 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', 'https://ewireapp-production.up.railway.app/']
+CSRF_TRUSTED_ORIGINS = ['https://ewireapp-production.up.railway.app']
 
 # Application definition
 
