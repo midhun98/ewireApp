@@ -11,9 +11,19 @@ class PostViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication, SessionAuthentication]
     queryset = Post.objects.all().order_by('id')
 
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return []
+        return [permission() for permission in self.permission_classes]
+
 
 class LikeViewSet(viewsets.ModelViewSet):
     serializer_class = LikeSerializer
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [TokenAuthentication, SessionAuthentication]
     queryset = Like.objects.all().order_by('id')
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return []
+        return [permission() for permission in self.permission_classes]
