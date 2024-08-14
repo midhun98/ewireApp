@@ -9,10 +9,11 @@ class PostSerializer(serializers.ModelSerializer):
     )
     created_at = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', read_only=True)
     tags_display = serializers.SlugRelatedField(slug_field='name', many=True, read_only=True, source='tags')
+    likes_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Post
-        fields = ['id', 'title', 'description', 'tags', 'tags_display', 'published', 'created_at']
+        fields = ['id', 'title', 'description', 'tags', 'tags_display', 'published', 'created_at', 'likes_count']
 
     def create(self, validated_data):
         tags_data = validated_data.pop('tags', [])
