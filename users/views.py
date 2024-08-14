@@ -13,6 +13,7 @@ from users.serializers import (LoginSerializer,
 # Create your views here.
 
 class LoginAPI(APIView):
+    authentication_classes = []
     serializer_class = LoginSerializer
 
     def post(self, request, *args, **kwargs):
@@ -35,6 +36,8 @@ class LoginAPI(APIView):
 
 
 class UserRegistrationView(APIView):
+    authentication_classes = []
+
     @swagger_auto_schema(
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
