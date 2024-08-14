@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Post, Tag
+from .models import Post, Tag, Like
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -33,3 +33,12 @@ class PostSerializer(serializers.ModelSerializer):
             tag, created = Tag.objects.get_or_create(name=tag_name)
             tag_instances.append(tag)
         post.tags.set(tag_instances)
+
+
+class LikeSerializer(serializers.ModelSerializer):
+    post_title = serializers.SlugRelatedField(slug_field='title', read_only=True, source='post')
+    user_name = serializers.SlugRelatedField(slug_field='username', read_only=True, source='user')
+
+    class Meta:
+        model = Like
+        fields = ['id', 'user', 'user_name', 'post', 'post_title']
