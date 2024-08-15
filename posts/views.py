@@ -1,10 +1,10 @@
 from django.contrib.auth import get_user_model
-from rest_framework import status
 from rest_framework import viewsets, permissions
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .filters import LikeFilter
+
+from .filters import LikeFilter, PostFilter
 from .models import Post, Like
 from .serializers import PostSerializer, LikeSerializer
 
@@ -16,11 +16,22 @@ class PostViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [TokenAuthentication, SessionAuthentication]
     queryset = Post.objects.all().order_by('id')
+    filterset_class = PostFilter
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
             return []
         return [permission() for permission in self.permission_classes]
+
+    @action(detail=False, methods=['get'], url_path='my-posts', url_name='my_posts')
+    def list_posts_by_user(self, request):
+        """
+        API to list only the posts of the authenticated user.
+        """
+        user = request.user
+        posts = Post.objects.filter(user=user).order_by('id')
+        serializer = self.get_serializer(posts, many=True)
+        return Response(serializer.data)
 
 
 class LikeViewSet(viewsets.ModelViewSet):
@@ -39,7 +50,7 @@ class LikeViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
     @action(detail=False, methods=['get'], url_path='my-likes', url_name='my_likes')
-    def list_likes_by_user(self, request, user_id=None):
+    def list_likes_by_user(self, request):
         """
         API to list only the likes of the authenticated user.
         """
