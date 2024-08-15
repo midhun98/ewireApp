@@ -6,6 +6,7 @@ from rest_framework.response import Response
 
 from .filters import LikeFilter, PostFilter
 from .models import Post, Like
+from .permissions import IsOwnerOrReadOnly
 from .serializers import PostSerializer, LikeSerializer
 
 User = get_user_model()
@@ -20,7 +21,7 @@ class CustomPageNumberPagination(pagination.PageNumberPagination):
 class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     pagination_class = CustomPageNumberPagination
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
     authentication_classes = [TokenAuthentication, SessionAuthentication]
     queryset = Post.objects.all().order_by('id')
     filterset_class = PostFilter
@@ -48,7 +49,7 @@ class PostViewSet(viewsets.ModelViewSet):
 class LikeViewSet(viewsets.ModelViewSet):
     serializer_class = LikeSerializer
     pagination_class = CustomPageNumberPagination
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
     authentication_classes = [TokenAuthentication, SessionAuthentication]
     queryset = Like.objects.all().order_by('id')
     filterset_class = LikeFilter
