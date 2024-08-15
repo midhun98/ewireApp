@@ -38,7 +38,15 @@ class PostSerializer(serializers.ModelSerializer):
 class LikeSerializer(serializers.ModelSerializer):
     post_title = serializers.SlugRelatedField(slug_field='title', read_only=True, source='post')
     user_name = serializers.SlugRelatedField(slug_field='username', read_only=True, source='user')
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Like
         fields = ['id', 'user', 'user_name', 'post', 'post_title']
+
+    def validate(self, data):
+        user = self.context['request'].user
+        post = data['post']
+        if Like.objects.filter(user=user, post=post).exists():
+            raise serializers.ValidationError("You have already liked this post.")
+        return data

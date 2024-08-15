@@ -27,3 +27,6 @@ class LikeViewSet(viewsets.ModelViewSet):
         if self.action in ['list', 'retrieve']:
             return []
         return [permission() for permission in self.permission_classes]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
