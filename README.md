@@ -24,11 +24,11 @@ POSTGRES_PASSWORD=postgres
 docker build -t ewire-app-image .
 ```
 
-### Step 4. Build and Run the Containers
+### Step 4. Build and Run the Containers.
 ```
 docker-compose -f docker-compose-local.yml up --build
 ```
-### Step 5. Apply the migrations
+### Step 5. Apply the migrations.
 ```
 docker-compose exec app python manage.py migrate
 ```
