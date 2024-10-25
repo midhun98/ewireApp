@@ -32,7 +32,7 @@ docker-compose -f docker-compose-local.yml up --build
 ```
 docker-compose exec app python manage.py migrate
 ```
-### Step 5. Create Superuser.
+### Step 5. Create Superuser..
 ```
 docker-compose exec app python manage.py createsuperuser
 ```
